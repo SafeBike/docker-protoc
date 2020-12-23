@@ -2,7 +2,7 @@
 PROTOC_VERSION = 3.13.0
 
 # https://github.com/bufbuild/buf/releases
-BUF_VERISON = 0.27.1
+BUF_VERSION = 0.27.1
 
 # https://golang.org/doc/devel/release.html
 GO_VERSION = 1.15.2
@@ -19,6 +19,10 @@ GATEWAY_VERSION = v1.15.2
 IMAGE = safebike/protoc
 TAG = latest
 
+DOCKER_BUILDKIT = 1
+
+CURRENT_DIR = $(shell pwd)
+
 .PHONY: all
 all: build example ## Build and run the example
 
@@ -29,7 +33,7 @@ help: ## Show help
 .PHONY: test
 test: ## Check the environment variables
 	@test $(PROTOC_VERSION)
-	@test $(BUF_VERISON)
+	@test $(BUF_VERSION)
 	@test $(GO_VERSION)
 	@test $(PROTOC_GEN_GO_VERSION)
 	@test $(PROTOC_GEN_GO_GRPC_VERSION)
@@ -42,7 +46,7 @@ build: test ## Build Docker image
 	docker build \
 	--tag $(IMAGE):$(TAG) \
 	--build-arg PROTOC_VERSION=$(PROTOC_VERSION) \
-	--build-arg BUF_VERISON=$(BUF_VERISON) \
+	--build-arg BUF_VERSION=$(BUF_VERSION) \
 	--build-arg GO_VERSION=$(GO_VERSION) \
 	--build-arg PROTOC_GEN_GO_VERSION=$(PROTOC_GEN_GO_VERSION) \
 	--build-arg PROTOC_GEN_GO_GRPC_VERSION=$(PROTOC_GEN_GO_GRPC_VERSION) \
@@ -51,14 +55,14 @@ build: test ## Build Docker image
 
 .PHONY: example
 example: test ## Build hello/hello.proto with protoc
-	docker run --rm --volume pwd:/home/docker/app --workdir /home/docker/app $(IMAGE):$(TAG) \
+	docker run --rm --volume $(CURRENT_DIR):/home/docker/app --workdir /home/docker/app $(IMAGE):$(TAG) \
     	protoc \
     		-I /home/docker/.local/include \
     		-I /home/docker/.local/include/third_party/googleapis \
     		-I hello \
-    		--go_out=hello \
-    		--go-grpc_out=hello \
-    		hello/hello.proto
+    		--go_out=./hello --go_opt=paths=source_relative \
+    		--go-grpc_out=./hello --go-grpc_opt=paths=source_relative \
+    		./hello/hello.proto
 
 .PHONY: push
 push: build ## Push image to `https://hub.docker.com`

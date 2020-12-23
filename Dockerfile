@@ -24,11 +24,11 @@ RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC
     && rm protoc-${PROTOC_VERSION}-linux-x86_64.zip
 ENV PATH $PATH:${LOCAL}/protoc/bin
 
-ARG BUF_VERISON
-RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERISON}/buf-Linux-x86_64 \
+ARG BUF_VERSION
+RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/buf-Linux-x86_64 \
     && chmod +x buf-Linux-x86_64 \
     && mv buf-Linux-x86_64 ${LOCAL}/bin/buf
-RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERISON}/protoc-gen-buf-check-lint-Linux-x86_64 \
+RUN wget https://github.com/bufbuild/buf/releases/download/v${BUF_VERSION}/protoc-gen-buf-check-lint-Linux-x86_64 \
     && chmod +x protoc-gen-buf-check-lint-Linux-x86_64 \
     && mv protoc-gen-buf-check-lint-Linux-x86_64 ${LOCAL}/bin/protoc-gen-buf-check-lint
 
