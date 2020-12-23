@@ -18,15 +18,24 @@ Run `protoc` with `docker`.
 
 ## Install
 
+From Docker Hub
+
+```sh
+docker pull safebike/protoc
+```
+
+Or with the makefile
+
 ```sh
 make build IMAGE=image TAG=tag
 ```
 
 ## Example
 
-Run `make example` to generate gRPC code of `hello/hello.proto` with `protoc`.
-
-This will regenerate the `hello/hello.pb.go` and `hello/hello_grpc.pb.go` files, which contain:
+```sh
+make example
+```
+This will generate gRPC code of `hello/hello.proto` with `protoc` and regenerate the `hello/hello.pb.go` and `hello/hello_grpc.pb.go` files, which contain:
 - Code for populating, serializing, and retrieving HelloRequest and HelloReply message types.
 - Generated client and server code.
 
