@@ -1,11 +1,11 @@
 # https://github.com/protocolbuffers/protobuf/releases
-PROTOC_VERSION = 3.13.0
+PROTOC_VERSION = 3.14.0
 
 # https://github.com/bufbuild/buf/releases
-BUF_VERSION = 0.27.1
+BUF_VERSION = 0.33.0
 
 # https://golang.org/doc/devel/release.html
-GO_VERSION = 1.15.2
+GO_VERSION = 1.15.6
 
 # https://github.com/protocolbuffers/protobuf-go/releases
 PROTOC_GEN_GO_VERSION = v1.25.0
@@ -14,17 +14,14 @@ PROTOC_GEN_GO_VERSION = v1.25.0
 PROTOC_GEN_GO_GRPC_VERSION = v1.0.0
 
 # https://github.com/grpc-ecosystem/grpc-gateway/releases
-GATEWAY_VERSION = v1.15.2
+GATEWAY_VERSION = v1.16.0
 
 IMAGE = safebike/protoc
 TAG = latest
 
-DOCKER_BUILDKIT = 1
-
-CURRENT_DIR = $(shell pwd)
-
 .PHONY: all
-all: build example ## Build and run the example
+all: ## Build and run the example
+all: build example
 
 .PHONY: help
 help: ## Show help
@@ -55,7 +52,7 @@ build: test ## Build Docker image
 
 .PHONY: example
 example: test ## Build hello/hello.proto with protoc
-	docker run --rm --volume $(CURRENT_DIR):/home/docker/app --workdir /home/docker/app $(IMAGE):$(TAG) \
+	docker run --rm --volume $(PWD):/home/docker/app --workdir /home/docker/app $(IMAGE):$(TAG) \
     	protoc \
     		-I /home/docker/.local/include \
     		-I /home/docker/.local/include/third_party/googleapis \
